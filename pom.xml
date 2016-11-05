@@ -6,8 +6,8 @@
 	<packaging>jar</packaging>
 	<version>0.1</version>
 
-	<groupId>com.github.aimmoth.scala.compiler</groupId>
-	<artifactId>scalajs-compiler</artifactId>
+	<groupId>com.github.aimmoth.scala.compiler.jetty</groupId>
+	<artifactId>scalajs-compiler-jetty</artifactId>
 
 	<properties>
 		<scala.version>2.11.8</scala.version>
