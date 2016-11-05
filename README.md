@@ -6,23 +6,21 @@ Using it Live
 -------------
 If this compiler is used live, use it as a dependency and make sure you find the dependency JAR files with a relative path. Usually it's something like "/WEB-INF/lib/". Check out the "web-demo" branch for a live demo. Make sure all dependencies are either with Scala source code or compiled with Scala JS.
 
-Class Loader
-------------
-This Scala JS Compiler uses a ClassLoader. If you want to use ServletContext, switch to branch "servlet-compiler".
-
-Test
-----
-There's a unit test loading necessary dependencies and a extra one. The test is using the following JAR files put in 'src/test/resources':
- * scalajs-dom_sjs0.6_2.11-0.9.0.jar
- * scalajs-library_2.11-0.6.9.jar
- * scala-library-2.11.8.jar
- * scala-reflect-2.11.8.jar
+Jetty
+-----
+This Scala JS Compiler uses ServletContext to load classes and SLF4J for logging.
 
 Environment
 -----------
-This is a Maven JAR project with Java 8, Scala and Scala JS.
+This is a Maven project with Google Flexible Environment with Java 8, Scala 2.11 and 
+Web Servlets 3.1.
 
-Live
-----
-It's used in a web demo. Check it out [here](https://scala-js-compiler.appspot.com/index.scala). It uses the branch [web-demo](https://github.com/AIMMOTH/scala-js-compiler/tree/web-demo).
+Installation
+------------
+Install Java 8, Scala 2.11 and Maven 3.3.
 
+
+Run and Deploy
+--------------
+
+Use maven to build with $ mvn clean package install 
