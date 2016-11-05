@@ -10,6 +10,7 @@
   <artifactId>scalajs-compiler-jetty</artifactId>
 
   <properties>
+    <!-- These are set in Config.scala too! -->
     <scala.version>2.11.8</scala.version>
     <scala.js.version>0.6.10</scala.js.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
