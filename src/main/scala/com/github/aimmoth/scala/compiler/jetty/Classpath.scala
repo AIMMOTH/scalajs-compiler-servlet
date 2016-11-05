@@ -1,4 +1,4 @@
-package fiddle
+package com.github.aimmoth.scala.compiler.jetty
 
 import java.io.ByteArrayInputStream
 import java.util.zip.ZipInputStream

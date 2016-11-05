@@ -1,10 +1,8 @@
-package fiddle
+package com.github.aimmoth.scala.compiler.jetty
+
+import java.util.zip.ZipFile
 
 import org.junit.Test
-import java.util.zip.ZipInputStream
-import java.io.FileInputStream
-import java.util.zip.ZipFile
-import java.io.File
 
 class TestJarFile {
 

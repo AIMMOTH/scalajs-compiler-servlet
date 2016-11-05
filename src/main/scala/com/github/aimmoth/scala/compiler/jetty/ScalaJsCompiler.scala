@@ -1,12 +1,13 @@
-package fiddle
+package com.github.aimmoth.scala.compiler.jetty
 
+import java.util.zip.ZipEntry
+import java.util.zip.ZipFile
+
+import scala.io.Source
 import scala.language.postfixOps
 import scala.reflect.io.VirtualFile
 
 import org.slf4j.LoggerFactory
-import java.util.zip.ZipFile
-import java.util.zip.ZipEntry
-import scala.io.Source
 
 class ScalaJsCompiler {
 

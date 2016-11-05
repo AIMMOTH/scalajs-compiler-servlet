@@ -1,4 +1,4 @@
-package fiddle
+package com.github.aimmoth.scala.compiler.jetty
 
 import java.util.Properties
 
