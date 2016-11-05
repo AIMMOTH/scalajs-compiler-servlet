@@ -8,12 +8,13 @@ import scala.language.postfixOps
 import scala.reflect.io.VirtualFile
 
 import org.slf4j.LoggerFactory
+import javax.servlet.ServletContext
 
 class ScalaJsCompiler {
 
   val log = LoggerFactory.getLogger(getClass)
 
-    def compileJarWithScalaJsSource(context : ClassLoader, jarWithSource: ZipFile, optimizer: Optimizer, relativeJarPath: String): String = {
+    def compileJarWithScalaJsSource(context : ServletContext, jarWithSource: ZipFile, optimizer: Optimizer, relativeJarPath: String): String = {
     jarWithSource.entries match {
       case entries => 
         (new Iterator[ZipEntry] {
@@ -28,14 +29,14 @@ class ScalaJsCompiler {
     }
   }
   
-  def compileScalaJsString(context : ClassLoader, source: String, optimizer: Optimizer, relativeJarPath: String, additionalLibs : List[String] = Nil): String = {
+  def compileScalaJsString(context : ServletContext, source: String, optimizer: Optimizer, relativeJarPath: String, additionalLibs : List[String] = Nil): String = {
     compileScalaJsStrings(context, List(source), optimizer, relativeJarPath, additionalLibs)
   }
   
   /**
    * String with Scala JS code
    */
-  def compileScalaJsStrings(context : ClassLoader, sources: List[String], optimizer: Optimizer, relativeJarPath: String, additionalLibs : List[String] = Nil): String = {
+  def compileScalaJsStrings(context : ServletContext, sources: List[String], optimizer: Optimizer, relativeJarPath: String, additionalLibs : List[String] = Nil): String = {
     /**
      * Converts a bunch of bytes into Scalac's weird VirtualFile class
      */

@@ -13,12 +13,13 @@ import org.scalajs.core.tools.io.IRFileCache
 import org.scalajs.core.tools.io.MemVirtualBinaryFile
 import org.scalajs.core.tools.io.VirtualJarFile
 import org.slf4j.LoggerFactory
+import javax.servlet.ServletContext
 
 object Classpath {
   
-  private lazy val build : (ClassLoader, String, List[String]) => Classpath = (klass, relativeJarPath, additionalLibs) => new Classpath(klass, relativeJarPath, additionalLibs)
+  private lazy val build : (ServletContext, String, List[String]) => Classpath = (klass, relativeJarPath, additionalLibs) => new Classpath(klass, relativeJarPath, additionalLibs)
   
-  def apply(klass : ClassLoader, relativeJarPath : String, additionalLibs : List[String] = Nil) = build(klass, relativeJarPath, additionalLibs)
+  def apply(klass : ServletContext, relativeJarPath : String, additionalLibs : List[String] = Nil) = build(klass, relativeJarPath, additionalLibs)
 }
 
 /**
@@ -26,7 +27,7 @@ object Classpath {
  * compiler and re-shapes it into the correct structure to satisfy
  * scala-compile and scalajs-tools
  */
-class Classpath(context: ClassLoader, relativeJarPath : String, additionalLibs : List[String] = Nil) {
+class Classpath(context: ServletContext, relativeJarPath : String, additionalLibs : List[String] = Nil) {
 
   val log = LoggerFactory.getLogger(getClass)
   val timeout = 60.seconds
