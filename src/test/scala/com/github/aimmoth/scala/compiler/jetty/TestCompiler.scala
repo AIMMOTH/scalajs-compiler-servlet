@@ -6,16 +6,10 @@ class TestCompiler {
   
     val source = 
       """
-package com.github.aimmoth.scala.compiler.jetty
-
+package scalajs.source
 
 import scala.scalajs.js
-
 import org.scalajs.dom
-
-import com.github.aimmoth.scala.compiler.jetty.Optimizer;
-import com.github.aimmoth.scala.compiler.jetty.ScalaJsCompiler;
-
 import js.annotation._
 
 @JSExport
@@ -36,7 +30,7 @@ object HelloWorld extends js.JSApp {
 }
     """
     
-//  @Test
+  @Test
   def testCompilerFast : Unit = {
     val compiler = new ScalaJsCompiler
     val script = compiler.compileScalaJsString(getClass.getClassLoader, source, Optimizer.Fast, "", List("scalajs-dom_sjs0.6_2.11-0.9.1.jar"))
@@ -44,7 +38,7 @@ object HelloWorld extends js.JSApp {
     println(s"Fast script size ${script.length}B")
   }    
     
-//  @Test
+  @Test
   def testCompilerFull : Unit = {
     val compiler = new ScalaJsCompiler
     val script = compiler.compileScalaJsString(getClass.getClassLoader, source, Optimizer.Full, "", List("scalajs-dom_sjs0.6_2.11-0.9.1.jar"))
