@@ -38,14 +38,14 @@ object HelloWorld extends js.JSApp {
     println(s"Fast script size ${script.length}B")
   }    
     
-//  @Test
+  @Test
   def testCompilerFull : Unit = {
     val compiler = new ScalaJsCompiler
     val script = compiler.compileScalaJsString(getClass.getClassLoader, source, Optimizer.Full, "", List("scalajs-dom_sjs0.6_2.11-0.9.1.jar"))
     println(s"Full script size ${script.length}B")
   }
   
-//  @Test
+  @Test
   def testCompilationError : Unit = {
     val bug =
       """
