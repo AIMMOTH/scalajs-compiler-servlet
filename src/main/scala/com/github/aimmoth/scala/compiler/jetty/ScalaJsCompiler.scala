@@ -29,14 +29,14 @@ class ScalaJsCompiler {
     }
   }
   
-  def compileScalaJsString(context : ServletContext, source: String, optimizer: Optimizer, relativeJarPath: String, additionalLibs : List[String] = Nil): String = {
+  def compileScalaJsString(context : ServletContext, source: String, optimizer: Optimizer, relativeJarPath: String, additionalLibs : Set[String] = Set()): String = {
     compileScalaJsStrings(context, List(source), optimizer, relativeJarPath, additionalLibs)
   }
   
   /**
    * String with Scala JS code
    */
-  def compileScalaJsStrings(context : ServletContext, sources: List[String], optimizer: Optimizer, relativeJarPath: String, additionalLibs : List[String] = Nil): String = {
+  def compileScalaJsStrings(context : ServletContext, sources: List[String], optimizer: Optimizer, relativeJarPath: String, additionalLibs : Set[String] = Set()): String = {
     /**
      * Converts a bunch of bytes into Scalac's weird VirtualFile class
      */

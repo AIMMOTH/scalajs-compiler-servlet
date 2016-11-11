@@ -17,9 +17,9 @@ import javax.servlet.ServletContext
 
 object Classpath {
   
-  private lazy val build : (ServletContext, String, List[String]) => Classpath = (klass, relativeJarPath, additionalLibs) => new Classpath(klass, relativeJarPath, additionalLibs)
+  private lazy val build : (ServletContext, String, Set[String]) => Classpath = (klass, relativeJarPath, additionalLibs) => new Classpath(klass, relativeJarPath, additionalLibs)
   
-  def apply(klass : ServletContext, relativeJarPath : String, additionalLibs : List[String] = Nil) = build(klass, relativeJarPath, additionalLibs)
+  def apply(klass : ServletContext, relativeJarPath : String, additionalLibs : Set[String] = Set()) = build(klass, relativeJarPath, additionalLibs)
 }
 
 /**
@@ -27,7 +27,7 @@ object Classpath {
  * compiler and re-shapes it into the correct structure to satisfy
  * scala-compile and scalajs-tools
  */
-class Classpath(context: ServletContext, relativeJarPath : String, additionalLibs : List[String] = Nil) {
+class Classpath(context: ServletContext, relativeJarPath : String, additionalLibs : Set[String] = Set()) {
 
   val log = LoggerFactory.getLogger(getClass)
   val timeout = 60.seconds
@@ -56,7 +56,7 @@ class Classpath(context: ServletContext, relativeJarPath : String, additionalLib
   val commonLibraries = {
     log.info("Loading files...")
     // load all external libs in parallel using spray-client
-    val jarFiles = (additionalLibs ++ baseLibs).par.map { name =>
+    val jarFiles = (additionalLibs.toSeq ++ baseLibs).par.map { name =>
       val stream = context.getResourceAsStream(relativeJarPath + name)
       log.debug(s"Loading resource $name")
       if (stream == null) {
