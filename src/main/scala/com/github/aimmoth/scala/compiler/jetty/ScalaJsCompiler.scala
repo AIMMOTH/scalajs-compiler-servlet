@@ -7,12 +7,12 @@ import scala.io.Source
 import scala.language.postfixOps
 import scala.reflect.io.VirtualFile
 
-import org.slf4j.LoggerFactory
 import javax.servlet.ServletContext
+import java.util.logging.Logger
 
 class ScalaJsCompiler {
 
-  val log = LoggerFactory.getLogger(getClass)
+    val log = Logger.getLogger(getClass.getName)
 
     def compileJarWithScalaJsSource(context : ServletContext, jarWithSource: ZipFile, optimizer: Optimizer, relativeJarPath: String): String = {
     jarWithSource.entries match {
@@ -54,8 +54,11 @@ class ScalaJsCompiler {
     actor.doCompile match {
       case cr if cr.jsCode.isDefined =>
         cr.jsCode.get
-      case cr =>
-        throw new Exception(cr.log)
+      case cr => {
+        val text = cr.log
+        log.warning(text)
+    	  throw new Exception(text)
+      }
     }
   }
 

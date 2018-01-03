@@ -4,7 +4,7 @@ import scala.collection.mutable
 import scala.reflect.io.VirtualFile
 
 import org.scalajs.core.tools.io.VirtualScalaJSIRFile
-import org.slf4j.LoggerFactory
+import java.util.logging.Logger
 
 case class CompileSource(envId : String, templateId : String, sourceCode : String, optimizer : Optimizer)
 
@@ -18,7 +18,7 @@ object CompileActor {
 
 class CompileActor(classPath : Classpath, envId : String, sourceCode : CompileActor.Source, optimizer : Optimizer) {
 
-  val log = LoggerFactory.getLogger(getClass)
+  val log = Logger.getLogger(getClass.getName)
   val compiler = new Compiler(classPath, envId)
   val opt = optimizer match {
     case Optimizer.Fast => compiler.fastOpt _
@@ -59,10 +59,10 @@ class CompileActor(classPath : Classpath, envId : String, sourceCode : CompileAc
 
     val res = compiler.compile(code, output.append(_))
     if (output.nonEmpty)
-      println(s"Compiler errors: $output")
+      log.info(s"Compiler errors: $output")
 
     val logSpam = output.mkString
-    log.debug(s"logSpam:$logSpam")
+    log.info(s"logSpam:$logSpam")
     CompilerResponse(res.map(processor), parseErrors(logSpam), logSpam)
   }
 }

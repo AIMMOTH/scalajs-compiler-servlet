@@ -4,15 +4,15 @@
 
   <modelVersion>4.0.0</modelVersion>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>1.2</version>
 
   <groupId>com.github.aimmoth.scala.compiler.jetty</groupId>
   <artifactId>scalajs-compiler-jetty</artifactId>
 
   <properties>
     <!-- These are set in Config.scala too! -->
-    <scala.version>2.11.8</scala.version>
-    <scala.js.version>0.6.10</scala.js.version>
+    <scala.version>2.11.12</scala.version>
+    <scala.js.version>0.6.21</scala.js.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
   </properties>
@@ -36,6 +36,7 @@
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <version>3.1.0</version>
+      <scope>provided</scope>
     </dependency>
 
     <!-- Scala -->
@@ -48,6 +49,7 @@
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-compiler</artifactId>
       <version>${scala.version}</version>
+      <scope>provided</scope>
     </dependency>
 
     <!-- Scala JS -->
@@ -60,6 +62,7 @@
       <groupId>org.scala-js</groupId>
       <artifactId>scalajs-library_2.11</artifactId>
       <version>${scala.js.version}</version>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.scala-js</groupId>
@@ -68,16 +71,16 @@
     </dependency>
 
     <!-- Logging -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>1.7.21</version>
-    </dependency>
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>1.7.21</version>
-    </dependency>
+<!--     <dependency> -->
+<!--       <groupId>org.slf4j</groupId> -->
+<!--       <artifactId>slf4j-api</artifactId> -->
+<!--       <version>1.7.21</version> -->
+<!--     </dependency> -->
+<!--     <dependency> -->
+<!--       <groupId>org.slf4j</groupId> -->
+<!--       <artifactId>slf4j-simple</artifactId> -->
+<!--       <version>1.7.21</version> -->
+<!--     </dependency> -->
 
     <dependency>
       <groupId>junit</groupId>
