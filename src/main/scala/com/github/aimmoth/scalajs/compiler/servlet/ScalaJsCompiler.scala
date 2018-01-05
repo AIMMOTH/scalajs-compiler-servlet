@@ -12,9 +12,10 @@ import java.util.logging.Logger
 
 class ScalaJsCompiler {
 
-    val log = Logger.getLogger(getClass.getName)
+  val log = Logger.getLogger(getClass.getName)
+  var classpath : Classpath = null
 
-  def compileJarWithScalaJsSource(context : ServletContext, jarWithSource: ZipFile, optimizer: Optimizer, relativeJarPath: String): String = {
+  def compileJarWithScalaJsSource(jarWithSource: ZipFile, optimizer: Optimizer): String = {
     jarWithSource.entries match {
       case entries => 
         (new Iterator[ZipEntry] {
@@ -24,19 +25,19 @@ class ScalaJsCompiler {
         .map(entry => Source.fromInputStream(jarWithSource.getInputStream(entry)).mkString)
         .mkString match {
           case source =>
-            compileScalaJsString(context, source, optimizer, relativeJarPath)
+            compileScalaJsString(source, optimizer)
         }
     }
   }
   
-  def compileScalaJsString(context : ServletContext, source: String, optimizer: Optimizer, relativeJarPath: String, additionalLibs : Set[String] = Set()): String = {
-    compileScalaJsStrings(context, List(source), optimizer, relativeJarPath, additionalLibs)
+  def compileScalaJsString(source: String, optimizer: Optimizer): String = {
+    compileScalaJsStrings(List(source), optimizer)
   }
   
   /**
    * String with Scala JS code
    */
-  def compileScalaJsStrings(context : ServletContext, sources: List[String], optimizer: Optimizer, relativeJarPath: String, additionalLibs : Set[String] = Set()): String = {
+  def compileScalaJsStrings(sources: List[String], optimizer: Optimizer): String = {
     /**
      * Converts a bunch of bytes into Scalac's weird VirtualFile class
      */
@@ -49,8 +50,12 @@ class ScalaJsCompiler {
     }
 
     val files = sources.map(s => makeFile(s.getBytes("UTF-8")))
+    
+    if (classpath == null) {
+      throw new RuntimeException("Run init to load classpath files first!")
+    }
 
-    new CompileActor(Classpath(context, relativeJarPath, additionalLibs), "scalatags", files, optimizer).doCompile match {
+    new CompileActor(classpath, "scalatags", files, optimizer).doCompile match {
       case cr if cr.jsCode.isDefined =>
         cr.jsCode.get
       case cr => {
@@ -61,4 +66,7 @@ class ScalaJsCompiler {
     }
   }
 
+  def init(context : ServletContext, relativeJarPath: String, additionalLibs : Set[String] = Set()) = {
+    classpath = Classpath(context, relativeJarPath, additionalLibs)
+  }
 }

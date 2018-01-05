@@ -16,10 +16,10 @@ import javax.servlet.ServletContext
 import java.util.logging.Logger
 
 object Classpath {
-  
-  private lazy val build : (ServletContext, String, Set[String]) => Classpath = (klass, relativeJarPath, additionalLibs) => new Classpath(klass, relativeJarPath, additionalLibs)
-  
-  def apply(klass : ServletContext, relativeJarPath : String, additionalLibs : Set[String] = Set()) = build(klass, relativeJarPath, additionalLibs)
+
+  private lazy val build: (ServletContext, String, Set[String]) => Classpath = (klass, relativeJarPath, additionalLibs) => new Classpath(klass, relativeJarPath, additionalLibs)
+
+  def apply(context: ServletContext, relativeJarPath: String, additionalLibs: Set[String] = Set()) = build(context, relativeJarPath, additionalLibs)
 }
 
 /**
@@ -27,7 +27,7 @@ object Classpath {
  * compiler and re-shapes it into the correct structure to satisfy
  * scala-compile and scalajs-tools
  */
-class Classpath(context: ServletContext, relativeJarPath : String, additionalLibs : Set[String] = Set()) {
+class Classpath(context: ServletContext, relativeJarPath: String, additionalLibs: Set[String] = Set()) {
 
   val log = Logger.getLogger(getClass.getName)
   val timeout = 60.seconds
@@ -35,8 +35,7 @@ class Classpath(context: ServletContext, relativeJarPath : String, additionalLib
   val baseLibs = Seq(
     s"scala-library-${Config.scalaVersion}.jar",
     s"scala-reflect-${Config.scalaVersion}.jar",
-    s"scalajs-library_${Config.scalaMainVersion}-${Config.scalaJSVersion}.jar"
-    )
+    s"scalajs-library_${Config.scalaMainVersion}-${Config.scalaJSVersion}.jar")
 
   val repoSJSRE = """([^ %]+) *%%% *([^ %]+) *% *([^ %]+)""".r
   val repoRE = """([^ %]+) *%% *([^ %]+) *% *([^ %]+)""".r
@@ -48,7 +47,7 @@ class Classpath(context: ServletContext, relativeJarPath : String, additionalLib
     // load all external libs in parallel using spray-client
     val jarFiles = (additionalLibs.toSeq ++ baseLibs).par.map { name =>
       val stream = context.getResourceAsStream(relativeJarPath + name)
-      log.fine(s"Loading resource $name")
+      log.info(s"Loading resource $name")
       if (stream == null) {
         throw new Exception(s"Classpath loading failed, jar $name not with relative JAR path '$relativeJarPath'")
       }
@@ -66,6 +65,11 @@ class Classpath(context: ServletContext, relativeJarPath : String, additionalLib
     log.info("Files loaded...")
     jarFiles ++ bootFiles
   }
+  
+  val virtualSet = commonLibraries.map {
+    case (name, data) =>
+      lib4compiler(name, data)
+  }
 
   /**
    * The loaded files shaped for Scalac to use
@@ -78,13 +82,13 @@ class Classpath(context: ServletContext, relativeJarPath : String, additionalLib
         try {
           in.getNextEntry
         } catch {
-          case e : Exception =>
+          case e: Exception =>
             null
         }
       })
       .takeWhile(_ != null)
       .map(x => {
-          (x, Streamable.bytes(in))
+        (x, Streamable.bytes(in))
       })
 
     val dir = new VirtualDirectory(name, None)
@@ -120,11 +124,7 @@ class Classpath(context: ServletContext, relativeJarPath : String, additionalLib
    * memory but is better than reaching all over the filesystem every time we
    * want to do something.
    */
-  val commonLibraries4compiler = {
-    commonLibraries.map { case (name, data) => 
-          lib4compiler(name, data)
-          }
-  }
+  val commonLibraries4compiler = virtualSet
 
   /**
    * In memory cache of all the jars used in the linker.
