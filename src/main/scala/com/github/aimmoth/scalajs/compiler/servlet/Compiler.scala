@@ -160,8 +160,7 @@ class Compiler(classPath: Classpath, env: String) { self =>
   def fullOpt(userFiles: Seq[VirtualScalaJSIRFile]): VirtualJSFile =
     link(userFiles, fullOpt = true)
 
-  def link(userFiles: Seq[VirtualScalaJSIRFile],
-    fullOpt: Boolean): VirtualJSFile = {
+  def link(userFiles: Seq[VirtualScalaJSIRFile], fullOpt: Boolean): VirtualJSFile = {
     val semantics =
       if (fullOpt) Semantics.Defaults.optimized
       else Semantics.Defaults

@@ -129,14 +129,11 @@ class Classpath(context: ServletContext, relativeJarPath: String, additionalLibs
   /**
    * In memory cache of all the jars used in the linker.
    */
-  val commonLibraries4linker =
-    commonLibraries.map { case (name, data) => lib4linker(name, data) }
+  val commonLibraries4linker = commonLibraries.map { case (name, data) => lib4linker(name, data) }
 
   val linkerCaches = mutable.Map.empty[List[String], Seq[IRFileCache.VirtualRelativeIRFile]]
 
-  def compilerLibraries(extLibs: List[String]) = {
-    commonLibraries4compiler
-  }
+  def compilerLibraries(extLibs: List[String]) = commonLibraries4compiler
 
   def linkerLibraries(extLibs: List[String]) = {
     linkerCaches.getOrElseUpdate(extLibs, {
