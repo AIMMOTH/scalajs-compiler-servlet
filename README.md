@@ -6,14 +6,10 @@ Using it Live
 -------------
 If this compiler is used live, use it as a dependency and make sure you find the dependency JAR files with a relative path. Usually it's something like "/WEB-INF/lib/". Check out the "web-demo" branch for a live demo. Make sure all dependencies are either with Scala source code or compiled with Scala JS.
 
-Jetty
------
-This Scala JS Compiler uses ServletContext to load classes and SLF4J for logging.
+Container
+---------
+This Scala JS Compiler uses ServletContext to load classes.
 
-Environment
------------
-This is a Maven project with Google Flexible Environment with Java 8, Scala 2.11 and 
-Web Servlets 3.1.
 
 Installation
 ------------

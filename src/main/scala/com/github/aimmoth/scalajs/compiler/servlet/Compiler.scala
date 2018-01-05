@@ -1,4 +1,4 @@
-package com.github.aimmoth.scalajs.compiler
+package com.github.aimmoth.scalajs.compiler.servlet
 
 import java.io.{PrintWriter, Writer}
 
@@ -33,7 +33,7 @@ import java.util.logging.{ Logger, Level }
 class Compiler(classPath: Classpath, env: String) { self =>
   
   val log = Logger.getLogger(getClass.getName)
-  val sjsLogger = new Log4jLogger()
+  val sjsLogger = new SjLogger()
   val extLibs = Config.environments.getOrElse(env, Nil)
 
   /**
@@ -176,7 +176,7 @@ class Compiler(classPath: Classpath, env: String) { self =>
     output
   }
 
-  class Log4jLogger(minLevel: JsLevel = JsLevel.Debug) extends JsLogger {
+  class SjLogger(minLevel: JsLevel = JsLevel.Debug) extends JsLogger {
 
     def log(level: JsLevel, message: =>String): Unit = if (level >= minLevel) {
       if (level == JsLevel.Warn || level == JsLevel.Error)

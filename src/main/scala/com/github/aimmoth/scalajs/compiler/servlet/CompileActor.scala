@@ -1,4 +1,4 @@
-package com.github.aimmoth.scalajs.compiler
+package com.github.aimmoth.scalajs.compiler.servlet
 
 import scala.collection.mutable
 import scala.reflect.io.VirtualFile
@@ -66,3 +66,15 @@ class CompileActor(classPath : Classpath, envId : String, sourceCode : CompileAc
     CompilerResponse(res.map(processor), parseErrors(logSpam), logSpam)
   }
 }
+
+sealed abstract class Optimizer
+
+object Optimizer {
+  case object Fast extends Optimizer
+
+  case object Full extends Optimizer
+}
+
+case class EditorAnnotation(row: Int, col: Int, text: Seq[String], tpe: String)
+
+case class CompilerResponse(jsCode: Option[String], annotations: Seq[EditorAnnotation], log: String)

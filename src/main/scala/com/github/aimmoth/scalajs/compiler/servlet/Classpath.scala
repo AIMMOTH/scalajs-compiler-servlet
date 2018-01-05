@@ -1,4 +1,4 @@
-package com.github.aimmoth.scalajs.compiler
+package com.github.aimmoth.scalajs.compiler.servlet
 
 import java.io.ByteArrayInputStream
 import java.util.zip.ZipInputStream
@@ -42,16 +42,6 @@ class Classpath(context: ServletContext, relativeJarPath : String, additionalLib
   val repoRE = """([^ %]+) *%% *([^ %]+) *% *([^ %]+)""".r
   val repoBase = "https://repo1.maven.org/maven2"
   val sjsVersion = s"_sjs${Config.scalaJSMainVersion}_${Config.scalaMainVersion}"
-
-  def buildRepoUri(ref: String) = {
-    ref match {
-      case repoSJSRE(group, artifact, version) =>
-        s"$repoBase/${group.replace('.', '/')}/$artifact$sjsVersion/$version/$artifact$sjsVersion-$version.jar"
-      case repoRE(group, artifact, version) =>
-        s"$repoBase/${group.replace('.', '/')}/${artifact}_${Config.scalaMainVersion}/$version/${artifact}_${Config.scalaMainVersion}-$version.jar"
-      case _ => ref
-    }
-  }
 
   val commonLibraries = {
     log.info("Loading files...")

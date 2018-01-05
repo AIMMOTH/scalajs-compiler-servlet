@@ -6,8 +6,8 @@
   <packaging>jar</packaging>
   <version>2.0-SNAPSHOT</version>
 
-  <groupId>com.github.aimmoth.scalajs.compiler</groupId>
-  <artifactId>scalajs-compiler</artifactId>
+  <groupId>com.github.aimmoth.scalajs.compiler.servlet</groupId>
+  <artifactId>scalajs-compiler-servlet</artifactId>
 
   <properties>
     <!-- These are set in Config.scala too! -->
@@ -17,7 +17,7 @@
     <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
   </properties>
 
-  <description>Compiles list of Strings with ScalaJS code to JavaScript. This version uses SLF4J Logging compatible with Jetty.</description>
+  <description>Compiles list of Strings with ScalaJS code to JavaScript. This version uses servlet context to read files on classpath.</description>
 
   <developers>
     <developer>

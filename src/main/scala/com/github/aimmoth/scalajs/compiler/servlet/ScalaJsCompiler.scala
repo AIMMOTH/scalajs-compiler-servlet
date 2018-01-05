@@ -1,4 +1,4 @@
-package com.github.aimmoth.scalajs.compiler
+package com.github.aimmoth.scalajs.compiler.servlet
 
 import java.util.zip.ZipEntry
 import java.util.zip.ZipFile
@@ -14,7 +14,7 @@ class ScalaJsCompiler {
 
     val log = Logger.getLogger(getClass.getName)
 
-    def compileJarWithScalaJsSource(context : ServletContext, jarWithSource: ZipFile, optimizer: Optimizer, relativeJarPath: String): String = {
+  def compileJarWithScalaJsSource(context : ServletContext, jarWithSource: ZipFile, optimizer: Optimizer, relativeJarPath: String): String = {
     jarWithSource.entries match {
       case entries => 
         (new Iterator[ZipEntry] {
@@ -50,8 +50,7 @@ class ScalaJsCompiler {
 
     val files = sources.map(s => makeFile(s.getBytes("UTF-8")))
 
-    val actor = new CompileActor(Classpath(context, relativeJarPath, additionalLibs), "scalatags", files, optimizer)
-    actor.doCompile match {
+    new CompileActor(Classpath(context, relativeJarPath, additionalLibs), "scalatags", files, optimizer).doCompile match {
       case cr if cr.jsCode.isDefined =>
         cr.jsCode.get
       case cr => {
