@@ -1,4 +1,4 @@
-package com.github.aimmoth.scala.compiler.jetty
+package com.github.aimmoth.scalajs.compiler
 
 case class EditorAnnotation(row: Int, col: Int, text: Seq[String], tpe: String)
 

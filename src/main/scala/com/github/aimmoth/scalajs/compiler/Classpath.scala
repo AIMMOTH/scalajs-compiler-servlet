@@ -1,4 +1,4 @@
-package com.github.aimmoth.scala.compiler.jetty
+package com.github.aimmoth.scalajs.compiler
 
 import java.io.ByteArrayInputStream
 import java.util.zip.ZipInputStream

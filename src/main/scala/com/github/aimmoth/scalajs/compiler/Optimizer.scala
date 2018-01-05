@@ -1,4 +1,4 @@
-package com.github.aimmoth.scala.compiler.jetty
+package com.github.aimmoth.scalajs.compiler
 
 sealed abstract class Optimizer
 
