@@ -14,7 +14,7 @@ object Config {
 
   val scalaVersion = "2.11.12"
   val scalaMainVersion = scalaVersion.split('.').take(2).mkString(".")
-  val scalaJSVersion = "0.6.21"
+  val scalaJSVersion = "0.6.25"
   val scalaJSMainVersion = scalaJSVersion.split('.').take(2).mkString(".")
 }
 
