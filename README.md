@@ -21,10 +21,5 @@ Lot's of compiler classes are deprecated in 2.12 and cannot be updated.
 
 Installation
 ------------
-Install Java 8, Scala 2.11 and Maven 3.3.
-
-
-Run and Deploy
---------------
-
-Use maven to build with $ mvn clean package install 
+For the scala 2 version, install Java 8, Scala 2.11 and sbt.
+For the scala 3 version (3.3.1) any java version will work.
