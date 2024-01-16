@@ -12,3 +12,11 @@ nbactions.xml
 /target/
 /.idea/
 *.iml
+
+# vscode + metals
+.metals
+.vscode
+.bloop
+metals.sbt
+target
+.bsp
