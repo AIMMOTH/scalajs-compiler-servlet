@@ -1,25 +1,25 @@
 package com.github.aimmoth.scalajs.compiler.servlet
 
-import java.io.ByteArrayInputStream
+import java.io.{ByteArrayInputStream, InputStream}
 import java.util.zip.ZipInputStream
-
 import scala.collection.mutable
 import scala.concurrent.duration.DurationInt
 import scala.reflect.io.Path.string2path
 import scala.reflect.io.Streamable
 import scala.reflect.io.VirtualDirectory
-
 import org.scalajs.core.tools.io.IRFileCache
 import org.scalajs.core.tools.io.MemVirtualBinaryFile
 import org.scalajs.core.tools.io.VirtualJarFile
-import javax.servlet.ServletContext
+
 import java.util.logging.Logger
 
 object Classpath {
 
-  private lazy val build: (ServletContext, String, Set[String]) => Classpath = (klass, relativeJarPath, additionalLibs) => new Classpath(klass, relativeJarPath, additionalLibs)
+  def apply(loader: (String) => InputStream, relativeJarPath: String, baseLibs: Seq[String], additionalLibs: Set[String] = Set()): Classpath =
+    build(loader, relativeJarPath, baseLibs, additionalLibs)
 
-  def apply(context: ServletContext, relativeJarPath: String, additionalLibs: Set[String] = Set()) = build(context, relativeJarPath, additionalLibs)
+  private lazy val build: ((String) => InputStream, String, Seq[String], Set[String]) => Classpath =
+    (loader, relativeJarPath, baseLibs, additionalLibs) => new Classpath(loader, relativeJarPath, baseLibs, additionalLibs)
 }
 
 /**
@@ -27,26 +27,15 @@ object Classpath {
  * compiler and re-shapes it into the correct structure to satisfy
  * scala-compile and scalajs-tools
  */
-class Classpath(context: ServletContext, relativeJarPath: String, additionalLibs: Set[String] = Set()) {
+class Classpath(loader: (String) => InputStream, relativeJarPath: String, baseLibs: Seq[String], additionalLibs: Set[String] = Set()) {
 
   val log = Logger.getLogger(getClass.getName)
-  val timeout = 60.seconds
-
-  val baseLibs = Seq(
-    s"scala-library-${Config.scalaVersion}.jar",
-    s"scala-reflect-${Config.scalaVersion}.jar",
-    s"scalajs-library_${Config.scalaMainVersion}-${Config.scalaJSVersion}.jar")
-
-  val repoSJSRE = """([^ %]+) *%%% *([^ %]+) *% *([^ %]+)""".r
-  val repoRE = """([^ %]+) *%% *([^ %]+) *% *([^ %]+)""".r
-  val repoBase = "https://repo1.maven.org/maven2"
-  val sjsVersion = s"_sjs${Config.scalaJSMainVersion}_${Config.scalaMainVersion}"
 
   val commonLibraries = {
     log.info("Loading files...")
     // load all external libs in parallel using spray-client
     val jarFiles = (additionalLibs.toSeq ++ baseLibs).par.map { name =>
-      val stream = context.getResourceAsStream(relativeJarPath + name)
+      val stream = loader(relativeJarPath + name)
       log.info(s"Loading resource $name")
       if (stream == null) {
         throw new Exception(s"Classpath loading failed, jar $name not with relative JAR path '$relativeJarPath'")

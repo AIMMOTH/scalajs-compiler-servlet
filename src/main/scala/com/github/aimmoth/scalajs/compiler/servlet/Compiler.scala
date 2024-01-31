@@ -30,11 +30,11 @@ import java.util.logging.{ Logger, Level }
   * Handles the interaction between scala-js-fiddle and
   * scalac/scalajs-tools to compile and optimize code submitted by users.
   */
-class Compiler(classPath: Classpath, env: String) { self =>
+class Compiler(classPath: Classpath, minLevel: JsLevel = JsLevel.Debug) { self =>
   
   val log = Logger.getLogger(getClass.getName)
-  val sjsLogger = new SjLogger()
-  val extLibs = Config.environments.getOrElse(env, Nil)
+  val sjsLogger = new SjLogger(minLevel)
+  val extLibs = Nil
 
   /**
     * Converts a bunch of bytes into Scalac's weird VirtualFile class
@@ -57,10 +57,11 @@ class Compiler(classPath: Classpath, env: String) { self =>
           name,
           classPath.compilerLibraries(extLibs)
             .map(_.lookupPathUnchecked(fileName, false))
-            .find(_ != null).map { f =>
-            val data = f.toByteArray
-            this.defineClass(name, data, 0, data.length)
-          }
+            .find(_ != null)
+            .map { f =>
+              val data = f.toByteArray
+              this.defineClass(name, data, 0, data.length)
+            }
         )
         res match {
           case None =>
@@ -114,7 +115,6 @@ class Compiler(classPath: Classpath, env: String) { self =>
   }
 
   def compile(src: CompileActor.Source, logger: String => Unit = _ => ()): Option[Seq[VirtualScalaJSIRFile]] = {
-
     val (settings, reporter, vd, jCtx, jDirs) = initGlobalBits(logger)
     val compiler = new nsc.Global(settings, reporter) with InMemoryGlobal {
       g =>
@@ -176,7 +176,6 @@ class Compiler(classPath: Classpath, env: String) { self =>
   }
 
   class SjLogger(minLevel: JsLevel = JsLevel.Debug) extends JsLogger {
-
     def log(level: JsLevel, message: =>String): Unit = if (level >= minLevel) {
       if (level == JsLevel.Warn || level == JsLevel.Error)
         self.log.warning(message)
