@@ -1,6 +1,6 @@
 Scala JS Compiler
 =================
-Compiles list of Strings with Scala JS code to a JavaScript. Use this by reading your Scala JS source code and let backend respond with a JavaScript.
+With ServletContext it loads libraries and compiles list of Strings with Scala JS code to a JavaScript. Use this by reading your Scala JS source code and let backend respond with a JavaScript.
 
 
 Using it Live
@@ -13,18 +13,13 @@ Container
 This Scala JS Compiler uses ServletContext to load classes.
 
 
-Scala Version 2.11
-------------------
+Scala Version 3.3.1 and Java 21
+-------------------------------
 
-Lot's of compiler classes are deprecated in 2.12 and cannot be updated.
-
-
-Installation
-------------
-Install Java 8, Scala 2.11 and Maven 3.3.
+Thanks to @VirtusLab for upgrading this library.
 
 
 Run and Deploy
 --------------
 
-Use maven to build with $ mvn clean package install 
+Use SBT to build. Use `> sbt publishM2` to create Maven library
