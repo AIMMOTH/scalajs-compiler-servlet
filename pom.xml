@@ -10,10 +10,11 @@
   <artifactId>scalajs-compiler-servlet</artifactId>
 
   <properties>
-    <!-- These are set in Config.scala too! -->
+    <!-- Set same in ScalaJsCompiler.init -->
     <scala.version>2.11.12</scala.version> <!-- https://mvnrepository.com/artifact/org.scala-lang/scala-library -->
     <scalajs.version>0.6.33</scalajs.version> <!-- https://mvnrepository.com/artifact/org.scala-js/scalajs-compiler -->
-    <junit.version>4.13.2</junit.version> <!-- https://mvnrepository.com/artifact/junit/junit -->
+
+    <junit.version>5.8.2</junit.version> <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api-->
 
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
@@ -33,14 +34,6 @@
   </prerequisites>
 
   <dependencies>
-    <!-- To add ServletContext -->
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>javax.servlet-api</artifactId>
-      <version>3.1.0</version>
-      <scope>provided</scope>
-    </dependency>
-
     <!-- Scala -->
     <dependency>
       <groupId>org.scala-lang</groupId>
@@ -74,21 +67,10 @@
       <version>${scalajs.version}</version>
     </dependency>
 
-    <!-- Logging -->
-<!--     <dependency> -->
-<!--       <groupId>org.slf4j</groupId> -->
-<!--       <artifactId>slf4j-api</artifactId> -->
-<!--       <version>1.7.21</version> -->
-<!--     </dependency> -->
-<!--     <dependency> -->
-<!--       <groupId>org.slf4j</groupId> -->
-<!--       <artifactId>slf4j-simple</artifactId> -->
-<!--       <version>1.7.21</version> -->
-<!--     </dependency> -->
-
+    <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
       <version>${junit.version}</version>
       <scope>test</scope>
     </dependency>

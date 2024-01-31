@@ -3,23 +3,31 @@ package com.github.aimmoth.scalajs.compiler.servlet
 import scala.collection.mutable
 import scala.reflect.io.VirtualFile
 
+import org.scalajs.core.tools.logging.{ Logger => JsLogger, Level => JsLevel }
 import org.scalajs.core.tools.io.VirtualScalaJSIRFile
 import java.util.logging.Logger
 
 case class CompileSource(envId : String, templateId : String, sourceCode : String, optimizer : Optimizer)
-
 case class CompleteSource(envId : String, templateId : String, sourceCode : String, flag : String, offset : Int)
 
 object CompileActor {
-
   type Source = List[VirtualFile]
-
 }
 
-class CompileActor(classPath : Classpath, envId : String, sourceCode : CompileActor.Source, optimizer : Optimizer) {
+sealed abstract class Optimizer
+
+object Optimizer {
+  case object Fast extends Optimizer
+  case object Full extends Optimizer
+}
+
+case class EditorAnnotation(row: Int, col: Int, text: Seq[String], tpe: String)
+case class CompilerResponse(jsCode: Option[String], annotations: Seq[EditorAnnotation], log: String)
+
+class CompileActor(classPath : Classpath, sourceCode : CompileActor.Source, optimizer : Optimizer, minLevel: JsLevel = JsLevel.Debug) {
 
   val log = Logger.getLogger(getClass.getName)
-  val compiler = new Compiler(classPath, envId)
+  val compiler = new Compiler(classPath, minLevel)
   val opt = optimizer match {
     case Optimizer.Fast => compiler.fastOpt _
     case Optimizer.Full => compiler.fullOpt _
@@ -62,19 +70,6 @@ class CompileActor(classPath : Classpath, envId : String, sourceCode : CompileAc
       log.info(s"Compiler errors: $output")
 
     val logSpam = output.mkString
-    log.info(s"logSpam:$logSpam")
     CompilerResponse(res.map(processor), parseErrors(logSpam), logSpam)
   }
 }
-
-sealed abstract class Optimizer
-
-object Optimizer {
-  case object Fast extends Optimizer
-
-  case object Full extends Optimizer
-}
-
-case class EditorAnnotation(row: Int, col: Int, text: Seq[String], tpe: String)
-
-case class CompilerResponse(jsCode: Option[String], annotations: Seq[EditorAnnotation], log: String)
